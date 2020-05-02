@@ -29,7 +29,7 @@ the following editions followed two online protocols [5,6]:
 - &#39;steps=400000,450000&#39; to &#39;steps=3000,3500&#39;
 - &#39;filters=255&#39; to &#39;filters=27&#39;
 
-1. To improve the model in capturing detailed features of images, we tried to modify some optional parameters in the &quot;yolov3.cfg&quot; configuration file:
+5. To improve the model in capturing detailed features of images, we tried to modify some optional parameters in the &quot;yolov3.cfg&quot; configuration file:
 
 - &#39;width=416&#39; to &#39;width=608&#39;
 - &#39;height=416&#39; to &#39;height=608&#39;
