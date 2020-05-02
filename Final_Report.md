@@ -1,13 +1,4 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
-{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
-{\colortbl;\red255\green255\blue255;\red25\green28\blue31;\red246\green247\blue249;}
-{\*\expandedcolortbl;;\cssrgb\c12941\c14510\c16078;\cssrgb\c97255\c97647\c98039;}
-\margl1440\margr1440\vieww20480\viewh13700\viewkind0
-\deftab720
-\pard\pardeftab720\sl320\partightenfactor0
-
-\f0\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec2 **AI for Everyone Final Report**\
+**AI for Everyone Final Report**\
 \
 Flora Shi, Zhichen Guo and Tianqi Yang\
 \
@@ -23,29 +14,23 @@ We obtained blood cell images from two sources. One is the Kaggle Blood Cell Ima
 \
 _Model preparation_\
 \
-All our work in this project was done in the GPU environment provided by Google Colab. After downloading the Darknet package [5], the open source Yolov3 framework, we did\
-\
-the following editions followed two online protocols [5,6]:\
+All our work in this project was done in the GPU environment provided by Google Colab. After downloading the Darknet package [5], the open source Yolov3 framework, we did the following editions followed two online protocols [5,6]:\
 \
 1. To fit yolov3 with Colab environment, we changed GPU= 1, CUDNN=1 and OPENCV=1 in the Makefile building the Darknet package in Google Colab.\
 2. We add our blood cell images and labels into the data/ folder, and created &quot;train.txt&quot;, &quot;valid.txt&quot; and &quot;test.txt&quot; files to define directory pathes of the images.\
 3. We also created &quot;bloodcells.data&quot; and &quot;bloodcells.name&quot; files to define the number and names of classes.\
 4. To fit yolov3 model with our costumed dataset, we changed basic parameters in the &quot;yolov3.cfg&quot; configuration file:\
-\
 - &#39;batch=1&#39; to &#39;batch=64&#39;\
 - &#39;subdivisions=1&#39; to &#39;subdivisions=16&#39;\
 - &#39;max\\_batches = 500200&#39; to &#39;max\\_batches = 4000&#39;\
 - &#39;steps=400000,450000&#39; to &#39;steps=3000,3500&#39;\
 - &#39;filters=255&#39; to &#39;filters=27&#39;\
-\
-1. To improve the model in capturing detailed features of images, we tried to modify some optional parameters in the &quot;yolov3.cfg&quot; configuration file:\
-\
+5. To improve the model in capturing detailed features of images, we tried to modify some optional parameters in the &quot;yolov3.cfg&quot; configuration file:\
 - &#39;width=416&#39; to &#39;width=608&#39;\
 - &#39;height=416&#39; to &#39;height=608&#39;\
 - &#39;saturation = 1.5&#39; to &#39;saturation = 1.6&#39;\
 - &#39;exposure = 1.5&#39; to &#39;exposure = 1.6&#39;\
 - &#39;ignore\\_thresh = .7&#39; to &#39;ignore\\_thresh = .65&#39;\
-\
 Weights are saved after 1000, 2000, 3000 and 4000 training batches. We also saved log file to tract average loss and mean average precision (mAP@0.5) values during the training.\
 \
 _GitHub repository_\
