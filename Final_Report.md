@@ -45,27 +45,23 @@ We created a GitHub repository (https://github.com/skygemyang/EGR590.git) to sto
 
 **Results**
 
-We failed to train the model when setting resizing width and height standards for input images at 608 because of the memory limitation on Google Colab. All other trainings based on 1200 training images, or 2000 training images, or 2000 training images with modification of saturation/exposure/ignore\_thresh parameters are successfully completed in about 5 hours on Google Colab. In all training conditions, the average loss stops decreasing after ~300 batches
+We failed to train the model when setting resizing width and height standards for input images at 608 because of the memory limitation on Google Colab. All other trainings based on 1200 training images, or 2000 training images, or 2000 training images with modification of saturation/exposure/ignore\_thresh parameters are successfully completed in about 5 hours on Google Colab. In all training conditions, the average loss stops decreasing after ~300 batches (Figure 1), yet the mean average precision (mAP@0.5) does not reach a plateau over 0.99 until ~3300 iterations (Figure 2). Therefore, we chose the weights obtained after training 4000 batches of images to test the model.
 
 <img src="Report_images/Figure_1.png">
 
-(Figure 1), yet the mean average precision (mAP@0.5) does not reach a plateau over 0.99 until ~3300 iterations (Figure 2). Therefore, we chose the weights obtained after training 4000 batches of images to test the model.
-
-![](RackMultipart20200502-4-oze822_html_698cc7ffee20a59c.png)
-
 Figure 1. Track of average loss during training in three different setting.
 
-![](RackMultipart20200502-4-oze822_html_6a6254eb2724fa59.png)
+<img src="Report_images/Figure_2.png">
 
 Figure 2. Track of average mAP@0.5 during training in three different setting.
 
 All three trained model successfully predicted the correct cell type and positions in most pre-augmented Kaggle images. We found that increasing the number of training images improves the model&#39;s ability to detect cells with slight abnormal structure (Figure 3A). However, neither increasing training images nor modification of saturation/exposure/ignore\_thresh parameters can help the model to tell two adhesive cells (Figure 3B).Finally, all three trained model were not able to predict the correct position or bounding box of single white blood cells in ALL-IBD images (Figure 4).
 
-![](RackMultipart20200502-4-oze822_html_14969d59efa22b04.png)
+<img src="Report_images/Figure_3.png">
 
 Figure 3. Prediction result. (A) Increasing training image numbers helped the model to detect a lymphocyte with large cytoplasm area. (B) Modification of saturation, exposure and ignore\_thresh parameters did not help the model to differentiate adhesive cells.
 
-![](RackMultipart20200502-4-oze822_html_6461d94663864346.png)
+<img src="Report_images/Figure_4.png">
 
 Figure 4. Models trained on Kaggle datasets cannot detect single white blood cells in ALL-IDB images.
 
