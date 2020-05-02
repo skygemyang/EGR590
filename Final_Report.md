@@ -47,6 +47,8 @@ We created a GitHub repository (https://github.com/skygemyang/EGR590.git) to sto
 
 We failed to train the model when setting resizing width and height standards for input images at 608 because of the memory limitation on Google Colab. All other trainings based on 1200 training images, or 2000 training images, or 2000 training images with modification of saturation/exposure/ignore\_thresh parameters are successfully completed in about 5 hours on Google Colab. In all training conditions, the average loss stops decreasing after ~300 batches
 
+<img src="Report_images/Figure_1.png">
+
 (Figure 1), yet the mean average precision (mAP@0.5) does not reach a plateau over 0.99 until ~3300 iterations (Figure 2). Therefore, we chose the weights obtained after training 4000 batches of images to test the model.
 
 ![](RackMultipart20200502-4-oze822_html_698cc7ffee20a59c.png)
