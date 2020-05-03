@@ -4,23 +4,24 @@ Flora Shi, Zhichen Guo and Tianqi Yang
 
 **Introduction**
 
-The diagnosis of blood-based diseases often involves identifying and characterizing patient blood samples. Traditional identification of blood cells is based on manual observation of features such as cell size, nuclear shape and the presence of cytoplasmic granules. This is a time and labor-intensive work, and its results are highly variable because of the differences between technician&#39;s hands and measuring standards. Therefore, it is important for clinical trials to have an automated and consistent method to detect and classify blood cells in microscope images. In this project, we will make use a state-of-the-art machine learning model, You only look once (YOLO) [1], to detect four types of white blood cells (Eosinophil, Lymphocyte, Monocyte, and Neutrophil) in provided images. We choose the YOLOv3 as it surpasses previous YOLO versions and most other object-detection systems considering speed and accuracy factors together.
+The diagnosis of blood-based diseases often involves identifying and characterizing patient blood samples. Traditional identification of blood cells is based on manual observation of features such as cell size, nuclear shape and the presence of cytoplasmic granules. This is a time and labor-intensive work, and its results are highly variable because of the differences between technician&#39;s hands and measuring standards. Therefore, it is important for clinical trials to have an automated and consistent method to detect and classify blood cells in microscope images. In this project, we will make use a state-of-the-art machine learning model, You Only Look Once (YOLO) [1], to detect four types of white blood cells (Eosinophil, Lymphocyte, Monocyte, and Neutrophil) in provided images. We chose the YOLOv3 as it surpasses previous YOLO versions and most other object-detection systems considering speed and accuracy factors together.
 
-**Methods**
+**Method**
 
 _Image dataset preparation_
 
-We obtained blood cell images from two sources. One is the Kaggle Blood Cell Images Dataset [2], which provides around 400 original blood cell microscope images and 3000 augmented images for each white blood cell type. The other one is the Acute Lymphoblastic Leukemia Image Database (ALL-IDB) [3], which provides 108 blood cell images collected from ALL patients or healthy volunteer. The augmented Kaggle images are used for model training and validation, and the types and positions of white blood cells in these images were labeld using LabelImg [4] software. We first used 1200 labeled augmented Kaggle images (1000 images for training dataset and 200 images for validation dataset) to train the model. To improve the model&#39;s detection range, we tried to increase the number of labeled images to 2000 (1600 images for training dataset, and 400 images for validatation dataset). After training, we randomly chose 20 pre-augmented Kaggle images and 20 ALL-IBD images to test the trained model.
+We obtained blood cell images from two sources. One was the Kaggle Blood Cell Images Dataset [2], which provides around 400 original blood cell microscope images and 3000 augmented images for each white blood cell type. The other one is the Acute Lymphoblastic Leukemia Image Database (ALL-IDB) [3], which provides 108 blood cell images collected from ALL patients or healthy volunteers. The augmented Kaggle images are used for model training and validation, and the types and positions of white blood cells in these images were labeled using LabelImg [4] software. We first used 1200 labeled augmented Kaggle images (1000 images for the training dataset and 200 images for the validation dataset) to train the model. To improve the model&#39;s detection range, we tried to increase the number of labeled images to 2000 (1600 images for the training dataset, and 400 images for the validation dataset). After training, we randomly chose 20 pre-augmented Kaggle images and 20 ALL-IBD images to test the model.
 
 _Model preparation_
 
-All our work in this project was done in the GPU environment provided by Google Colab. After downloading the Darknet package [5], the open source Yolov3 framework, we did
+All our work in this project was done in the GPU environment provided by Google Colab. After downloading the Darknet package [5], the open source Yolov3 framework, we did the following editions following two online protocols [5,6]:
 
-the following editions followed two online protocols [5,6]:
+1. To fit yolov3 with Colab environment, we changed GPU= 1, CUDNN=1 and OPENCV=1 in the Makefile before building the Darknet package in Google Colab.
 
-1. To fit yolov3 with Colab environment, we changed GPU= 1, CUDNN=1 and OPENCV=1 in the Makefile building the Darknet package in Google Colab.
-2. We add our blood cell images and labels into the data/ folder, and created &quot;train.txt&quot;, &quot;valid.txt&quot; and &quot;test.txt&quot; files to define directory pathes of the images.
+2. We add our blood cell images and labels into the data/ folder, and created &quot;train.txt&quot;, &quot;valid.txt&quot; and &quot;test.txt&quot; files to define directory paths of the images.
+
 3. We also created &quot;bloodcells.data&quot; and &quot;bloodcells.name&quot; files to define the number and names of classes.
+
 4. To fit yolov3 model with our costumed dataset, we changed basic parameters in the &quot;yolov3.cfg&quot; configuration file:
 
 - &#39;batch=1&#39; to &#39;batch=64&#39;
@@ -37,7 +38,7 @@ the following editions followed two online protocols [5,6]:
 - &#39;exposure = 1.5&#39; to &#39;exposure = 1.6&#39;
 - &#39;ignore\_thresh = .7&#39; to &#39;ignore\_thresh = .65&#39;
 
-Weights are saved after 1000, 2000, 3000 and 4000 training batches. We also saved log file to tract average loss and mean average precision (mAP@0.5) values during the training.
+During the training, weights are saved after 1000, 2000, 3000 and 4000 iterations (or batches). We also saved log file to track average loss and mean average precision (mAP@0.5) values during the training.
 
 _GitHub repository_
 
@@ -45,7 +46,7 @@ We created a GitHub repository (https://github.com/skygemyang/EGR590.git) to sto
 
 **Results**
 
-We failed to train the model when setting resizing width and height standards for input images at 608 because of the memory limitation on Google Colab. All other trainings based on 1200 training images, or 2000 training images, or 2000 training images with modification of saturation/exposure/ignore\_thresh parameters are successfully completed in about 5 hours on Google Colab. In all training conditions, the average loss stops decreasing after ~300 batches (Figure 1), yet the mean average precision (mAP@0.5) does not reach a plateau over 0.99 until ~3300 iterations (Figure 2). Therefore, we chose the weights obtained after training 4000 batches of images to test the model.
+We failed to train the model when setting resizing width and height standards for input images at 608 because of the memory limitation on Google Colab. All other trainings based on 1200 training images, or 2000 training images, or 2000 training images with modification of saturation/exposure/ignore\_thresh parameters were successfully completed in about 5 hours on Google Colab. In all training conditions, the average loss stopped decreasing after ~300 batches (Figure 1), yet the mean average precision (mAP@0.5) does not reach a plateau over 0.99 until ~3300 iterations (Figure 2). Therefore, we chose the weights obtained after training 4000 batches of images to test the model.
 
 <img src="Report_images/Figure_1.png">
 
@@ -55,11 +56,11 @@ Figure 1. Track of average loss during training in three different setting.
 
 Figure 2. Track of average mAP@0.5 during training in three different setting.
 
-All three trained model successfully predicted the correct cell type and positions in most pre-augmented Kaggle images. We found that increasing the number of training images improves the model&#39;s ability to detect cells with slight abnormal structure (Figure 3A). However, neither increasing training images nor modification of saturation/exposure/ignore\_thresh parameters can help the model to tell two adhesive cells (Figure 3B).Finally, all three trained model were not able to predict the correct position or bounding box of single white blood cells in ALL-IBD images (Figure 4).
+All three trained models successfully predicted the correct cell type and positions in most pre-augmented Kaggle images. We found that increasing the number of training images improves the model&#39;s ability to detect cells with slight abnormal structure (Figure 3A). However, neither increasing training images nor changing values of saturation/exposure/ignore\_thresh parameters can help the model to tell two contiguous cells (Figure 3B). Finally, all three trained models were not able to predict the correct position or bounding box of single white blood cells in ALL-IBD images (Figure 4).
 
 <img src="Report_images/Figure_3.png">
 
-Figure 3. Prediction result. (A) Increasing training image numbers helped the model to detect a lymphocyte with large cytoplasm area. (B) Modification of saturation, exposure and ignore\_thresh parameters did not help the model to differentiate adhesive cells.
+Figure 3. Prediction result. (A) Increasing training image numbers helped the model to detect a lymphocyte with large cytoplasm area. (B) Modification of saturation, exposure and ignore\_thresh parameters did not help the model to differentiate contiguous cells.
 
 <img src="Report_images/Figure_4.png">
 
@@ -67,9 +68,9 @@ Figure 4. Models trained on Kaggle datasets cannot detect single white blood cel
 
 **Discussion**
 
-The most probable reason why our trained models cannot differentiate two adhesive cells is that all our training images only contain one target cell. Therefore, the model did not learn enough features to detect more than one cell in one image. Comparing to Kaggle images, the ALL-IDB images have multiple target cells in each image with different resolution and high background. We think the best way to improve the prediction acurady is to include images from both dataset in the training and validation datasets.
+The most probable reason why our trained models cannot differentiate two contiguous cells is that all our training images only contain one target cell. Therefore, the model did not learn enough features to detect more than one cell in one image. Comparing to Kaggle images, the ALL-IDB images have multiple target cells in each image with different resolution and high background. We think the best way to improve the prediction accuracy is to include images from both dataset in the training and validation datasets.
 
-In sum, we conclude that YOLO is a potential deep learning model to achieve automatic detection of white blood cells image microscope images. The accuracy of prediction is highly dependent on the number and representativeness of training images.
+In sum, we conclude that YOLO is a potential deep learning model to achieve automatic detection of white blood cells in microscope images. The accuracy of prediction is highly dependent on the number and representativeness of training images.
 
 **Reference**
 
